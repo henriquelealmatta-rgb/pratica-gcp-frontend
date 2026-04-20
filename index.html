@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insight PDF · Demo GCP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#stage-views">Ir para o conteúdo</a>
+
+    <div class="app">
+      <aside class="rail" aria-label="Navegação">
+        <div class="rail-brand">
+          <span class="vd-logo">v<span class="vd-parens">(</span>dev<span class="vd-parens">)</span></span>
+          <span class="vd-sub">Grupo Visagio</span>
+        </div>
+        <p class="rail-product">Insight PDF</p>
+        <nav class="rail-nav" aria-label="Telas">
+          <a href="#inicio" class="nav-item is-active" data-view="home" data-title="Início">Início</a>
+          <a href="#analise" class="nav-item" data-view="analyze" data-title="Análise de documentos">Análise</a>
+          <a href="#arquitetura" class="nav-item" data-view="arch" data-title="Arquitetura">Arquitetura</a>
+        </nav>
+        <p class="rail-hint">Prática GCP · multicamada segura</p>
+      </aside>
+
+      <div class="stage">
+        <header class="stage-bar">
+          <h1 class="stage-title" id="stageTitle">Início</h1>
+          <div class="status" id="healthPill" data-state="idle">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="healthText">Verificando…</span>
+          </div>
+        </header>
+
+        <div class="stage-views" id="stage-views">
+          <section id="view-home" class="view is-active" data-view="home" aria-labelledby="home-heading">
+            <div class="home-layout">
+              <div class="hero">
+                <p class="hero-kicker">Laboratório</p>
+                <h2 id="home-heading" class="hero-title">Insights de PDFs com IA generativa</h2>
+                <p class="hero-lead">
+                  Documentos no <strong>Cloud Storage</strong>, processamento em VM <strong>sem IP público</strong> e
+                  modelo <strong>Gemini</strong> no Vertex AI — tráfego do usuário apenas na camada de borda.
+                </p>
+                <div class="hero-actions">
+                  <a href="#analise" class="btn primary">Começar análise</a>
+                  <a href="#arquitetura" class="btn secondary">Ver arquitetura</a>
+                </div>
+              </div>
+
+              <aside class="home-aside" aria-label="Resumo da stack">
+                <div class="stat-card">
+                  <span class="stat-label">Camadas</span>
+                  <span class="stat-value">3</span>
+                  <span class="stat-hint">Borda · App · Dados/IA</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">Exposição pública</span>
+                  <span class="stat-value">80/443</span>
+                  <span class="stat-hint">Somente frontend</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">Backend</span>
+                  <span class="stat-value">:5000</span>
+                  <span class="stat-hint">Tráfego interno VPC</span>
+                </div>
+                <div class="stat-card stat-card-accent">
+                  <span class="stat-label">IA</span>
+                  <span class="stat-value">Vertex</span>
+                  <span class="stat-hint">Gemini + PDF via gs://</span>
+                </div>
+              </aside>
+
+              <ul class="kpi-row" role="list">
+                <li class="kpi">
+                  <span class="kpi-title">VPC</span>
+                  <span class="kpi-desc">Rede dedicada, subnets e regras explícitas.</span>
+                </li>
+                <li class="kpi">
+                  <span class="kpi-title">Bucket</span>
+                  <span class="kpi-desc">PDFs versionáveis e fora da aplicação.</span>
+                </li>
+                <li class="kpi">
+                  <span class="kpi-title">IAM</span>
+                  <span class="kpi-desc">SA na VM backend com papéis mínimos.</span>
+                </li>
+                <li class="kpi">
+                  <span class="kpi-title">Proxy</span>
+                  <span class="kpi-desc">Nginx na borda encaminha <code>/api</code>.</span>
+                </li>
+              </ul>
+
+              <ul class="tiles" role="list">
+                <li class="tile">
+                  <span class="tile-icon" aria-hidden="true">1</span>
+                  <div>
+                    <h3 class="tile-title">Rede</h3>
+                    <p class="tile-text">VPC, subnets e firewall: 80/443 na borda; backend só na rede interna.</p>
+                  </div>
+                </li>
+                <li class="tile">
+                  <span class="tile-icon" aria-hidden="true">2</span>
+                  <div>
+                    <h3 class="tile-title">Dados</h3>
+                    <p class="tile-text">PDFs no bucket; leitura via SDK e contexto <code>gs://</code> para o modelo.</p>
+                  </div>
+                </li>
+                <li class="tile">
+                  <span class="tile-icon" aria-hidden="true">3</span>
+                  <div>
+                    <h3 class="tile-title">IA</h3>
+                    <p class="tile-text">Vertex AI com service account dedicada na VM de processamento.</p>
+                  </div>
+                </li>
+              </ul>
+
+              <div class="home-bottom">
+                <div class="card-block">
+                  <h3 class="card-block-title">Objetivos da prática</h3>
+                  <ul class="checklist">
+                    <li>Isolar dados sensíveis da internet pública.</li>
+                    <li>Demonstrar chamada privada ao modelo com contexto em GCS.</li>
+                    <li>Reforçar princípios de menor privilégio na service account.</li>
+                  </ul>
+                </div>
+                <div class="card-block">
+                  <h3 class="card-block-title">Serviços em destaque</h3>
+                  <div class="tag-grid">
+                    <span class="tag">Compute Engine</span>
+                    <span class="tag">Cloud Storage</span>
+                    <span class="tag">Vertex AI</span>
+                    <span class="tag">VPC Firewall</span>
+                    <span class="tag">IAM</span>
+                    <span class="tag">Nginx</span>
+                  </div>
+                </div>
+                <div class="card-block card-block-wide">
+                  <h3 class="card-block-title">Fluxo resumido</h3>
+                  <ol class="flow-list">
+                    <li>Usuário acessa o frontend pela internet (HTTPS).</li>
+                    <li>API segue pela rede interna até o Flask na VM sem IP público.</li>
+                    <li>O backend lê metadados e PDF no bucket e chama o Gemini.</li>
+                    <li>A resposta volta ao navegador pelo mesmo caminho seguro.</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="view-analyze" class="view" data-view="analyze" aria-labelledby="analyze-heading">
+            <h2 id="analyze-heading" class="sr-only">Análise de documentos</h2>
+            <div class="analyze-layout">
+              <aside class="analyze-aside" aria-label="Referência rápida">
+                <div class="mini-card">
+                  <h3 class="mini-card-title">Roteiro</h3>
+                  <ol class="mini-card-list">
+                    <li>Bucket + PDFs de referência</li>
+                    <li>SA com Storage Viewer + Vertex User</li>
+                    <li>Firewall e teste de conectividade</li>
+                  </ol>
+                </div>
+                <div class="mini-card">
+                  <h3 class="mini-card-title">Portas</h3>
+                  <ul class="mini-kv">
+                    <li><span>Frontend</span> <strong>80 / 443</strong></li>
+                    <li><span>Backend</span> <strong>5000</strong> (interno)</li>
+                  </ul>
+                </div>
+                <div class="mini-card">
+                  <h3 class="mini-card-title">Variáveis</h3>
+                  <ul class="mini-kv mini-kv-mono">
+                    <li><span>Projeto</span> <code>GOOGLE_CLOUD_PROJECT</code></li>
+                    <li><span>Bucket</span> <code>GCS_BUCKET</code></li>
+                    <li><span>Região</span> <code>VERTEX_LOCATION</code></li>
+                  </ul>
+                </div>
+                <div class="mini-card mini-card-tip">
+                  <h3 class="mini-card-title">Dica</h3>
+                  <p class="mini-card-text">
+                    Garanta que o PDF exista no bucket e que a região do Vertex coincida com a configurada no backend.
+                  </p>
+                </div>
+              </aside>
+
+              <div class="analyze-main">
+                <div class="shell shell-grow">
+                  <h3 class="shell-title">Prática GCP</h3>
+                  <div class="shell-body">
+                    <div class="panel panel-stack">
+                      <h4 class="panel-title">Documento</h4>
+                      <p class="panel-lead">
+                        Selecione um PDF no Cloud Storage. O modelo lê via URI <code>gs://</code>.
+                      </p>
+
+                      <div class="field">
+                        <label class="field-label" for="pdfSelect">Arquivo no bucket</label>
+                        <div class="field-box">
+                          <select id="pdfSelect" disabled>
+                            <option value="">Carregando lista…</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="field field-grow">
+                        <label class="field-label" for="prompt">Pergunta ou instrução para a IA</label>
+                        <div class="field-box field-box-tall">
+                          <textarea
+                            id="prompt"
+                            rows="8"
+                            placeholder="Ex.: resuma o documento e destaque pontos relevantes para compliance."
+                          ></textarea>
+                        </div>
+                      </div>
+
+                      <div class="actions">
+                        <button type="button" class="btn primary" id="btnAnalyze" disabled>
+                          <span class="btn-label">Gerar insights</span>
+                          <span class="btn-spinner" aria-hidden="true"></span>
+                        </button>
+                        <button type="button" class="btn secondary" id="btnReload">Recarregar PDFs</button>
+                      </div>
+                    </div>
+
+                    <div class="divider" role="presentation" aria-hidden="true"></div>
+
+                    <div class="panel panel-stack panel-result">
+                      <div class="panel-head">
+                        <h4 class="panel-title">Resultado</h4>
+                        <span class="chip" id="modelChip">—</span>
+                      </div>
+                      <div class="result-wrap result-wrap-grow">
+                        <div id="emptyState" class="empty">
+                          <p>Escolha um PDF e use <strong>Gerar insights</strong>.</p>
+                        </div>
+                        <div id="resultLoading" class="result-loading hidden" aria-live="polite" aria-busy="false">
+                          <p class="result-loading-title">Gerando insights</p>
+                          <div class="result-loading-skel" aria-hidden="true">
+                            <span class="sk-line sk-w100"></span>
+                            <span class="sk-line sk-w88"></span>
+                            <span class="sk-line sk-w72"></span>
+                            <span class="sk-line sk-w94"></span>
+                          </div>
+                          <div class="result-loading-dots" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                          </div>
+                        </div>
+                        <article id="result" class="markdown hidden" aria-live="polite"></article>
+                        <pre id="errorBox" class="error hidden"></pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="view-arch" class="view" data-view="arch" aria-labelledby="arch-heading">
+            <div class="arch-page">
+              <header class="arch-header">
+                <div>
+                  <h2 id="arch-heading" class="arch-heading">Arquitetura da demonstração</h2>
+                  <p class="arch-lead">
+                    Visão em camadas: borda pública, aplicação interna e serviços gerenciados para dados e IA.
+                  </p>
+                </div>
+                <div class="arch-header-cards">
+                  <div class="pill-card">
+                    <span class="pill-card-label">Exposição</span>
+                    <span class="pill-card-value">1 IP público</span>
+                  </div>
+                  <div class="pill-card">
+                    <span class="pill-card-label">Dados</span>
+                    <span class="pill-card-value">GCS privado</span>
+                  </div>
+                  <div class="pill-card">
+                    <span class="pill-card-label">Modelo</span>
+                    <span class="pill-card-value">Gemini</span>
+                  </div>
+                </div>
+              </header>
+
+              <div class="arch-wrap arch-wrap-spacious">
+                <h3 class="arch-section-title">Diagrama da arquitetura (estilo Google Cloud)</h3>
+                <p class="arch-diagram-intro">
+                  Layout em <strong>2D</strong>: cliente fora do painel, <strong>Google Cloud Platform</strong> com
+                  entrada HTTPS até a <strong>VM de borda</strong>, <strong>VPC</strong> com proxy interno até o Flask e
+                  <strong>plano de dados</strong> partindo da aplicação para <strong>GCS</strong> e
+                  <strong>Vertex AI</strong>. Traços tracejados com extremos arredondados; as linhas são
+                  <strong>calculadas sobre os cartões</strong> (redimensionamento alinhado). Cores: azul
+                  <strong>requisição</strong>; roxo <strong>leitura de PDF e inferência</strong>.
+                  <strong>Play</strong> anima o tracejado (lento, em loop até pausar).
+                </p>
+
+                <div id="gcpArchBoard" class="gcp-arch-board" aria-label="Diagrama da prática Insight PDF na GCP">
+                  <div class="gcp-arch-top">
+                    <span class="gcp-arch-product-line">Google Cloud</span>
+                    <div class="gcp-arch-toolbar">
+                      <button type="button" id="archFlowPlay" class="gcp-play-btn" aria-pressed="false">
+                        <span class="gcp-play-ico" aria-hidden="true">▶</span>
+                        <span class="gcp-play-txt">Play</span>
+                      </button>
+                      <span class="gcp-arch-toolbar-hint">Demonstração do fluxo de requisições e dados</span>
+                    </div>
+                  </div>
+
+                  <div class="gcp-arch-legend" aria-hidden="true">
+                    <span><span class="gcp-legend-dot gcp-legend-dot-req"></span> Requisição</span>
+                    <span><span class="gcp-legend-dot gcp-legend-dot-data"></span> Dados / modelo</span>
+                  </div>
+
+                  <div class="gcp-map" role="presentation">
+                    <svg
+                      id="gcpFlowLines"
+                      class="gcp-flow-svg gcp-flow-svg-lines"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    ></svg>
+                    <svg
+                      id="gcpFlowArrows"
+                      class="gcp-flow-svg gcp-flow-svg-arrows"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    ></svg>
+
+                    <div class="gcp-map-leading" aria-label="Cliente e ligação HTTPS">
+                      <aside class="gcp-map-client">
+                        <div class="gcp-svc-card gcp-svc-card--client" data-gcp-node="client">
+                          <div class="gcp-svc-card-h">Cliente</div>
+                          <div class="gcp-svc-card-b">
+                            <div class="gcp-icon-hex gcp-icon-hex--plain" aria-hidden="true">
+                              <svg viewBox="0 0 24 24" width="34" height="34" fill="none">
+                                <rect x="2" y="4" width="20" height="14" rx="2" stroke="#5f6368" stroke-width="1.4" />
+                                <path d="M2 8h20" stroke="#5f6368" stroke-width="1.4" />
+                                <rect x="6" y="11" width="12" height="4" rx="0.5" fill="#dadce0" />
+                              </svg>
+                            </div>
+                            <p class="gcp-svc-card-t">Navegador</p>
+                            <p class="gcp-svc-card-s">UI + <code>POST /api/analyze</code></p>
+                          </div>
+                        </div>
+                      </aside>
+
+                      <div class="gcp-map-bridge-spacer" aria-hidden="true"></div>
+                    </div>
+
+                    <section class="gcp-cloud-shell" aria-label="Google Cloud Platform">
+                      <div class="gcp-cloud-shell-title">Google Cloud Platform</div>
+
+                      <div class="gcp-layer gcp-layer-ingress">
+                        <span class="gcp-layer-lbl">Camada de entrada</span>
+                        <div class="gcp-ingress-stack">
+                          <article class="gcp-svc-card gcp-svc-card--ingress" data-gcp-node="ingress">
+                            <div class="gcp-svc-card-h">Rede pública</div>
+                            <div class="gcp-svc-card-b">
+                              <div class="gcp-icon-hex" aria-hidden="true">
+                                <img src="icons/cloud_generic.svg" width="40" height="40" alt="" />
+                              </div>
+                              <p class="gcp-svc-card-t">HTTPS / Internet</p>
+                              <p class="gcp-svc-card-s">Portas 80 e 443</p>
+                            </div>
+                          </article>
+                        </div>
+                      </div>
+
+                      <div class="gcp-vpc" aria-label="VPC">
+                        <span class="gcp-vpc-title">VPC · rede privada</span>
+
+                        <div class="gcp-vpc-body">
+                          <article class="gcp-svc-card gcp-vpc-tile gcp-vpc-tile--edge" data-gcp-node="edge">
+                            <div class="gcp-svc-card-h">Borda</div>
+                            <div class="gcp-svc-card-b">
+                              <div class="gcp-icon-hex" aria-hidden="true">
+                                <img src="icons/compute_engine.svg" width="40" height="40" alt="" />
+                              </div>
+                              <p class="gcp-svc-card-t">Compute Engine</p>
+                              <p class="gcp-svc-card-s">Nginx + frontend estático</p>
+                            </div>
+                          </article>
+
+                          <div class="gcp-vpc-conn-req gcp-vpc-conn-slot" aria-hidden="true"></div>
+
+                          <article class="gcp-svc-card gcp-vpc-tile gcp-vpc-tile--app" data-gcp-node="app">
+                            <div class="gcp-svc-card-h">Aplicação</div>
+                            <div class="gcp-svc-card-b">
+                              <div class="gcp-icon-hex" aria-hidden="true">
+                                <img src="icons/compute_engine.svg" width="40" height="40" alt="" />
+                              </div>
+                              <p class="gcp-svc-card-t">Compute Engine</p>
+                              <p class="gcp-svc-card-s">Flask · VPC interna · :5000</p>
+                            </div>
+                          </article>
+
+                          <article class="gcp-svc-card gcp-vpc-tile gcp-vpc-tile--gcs" data-gcp-node="gcs">
+                            <div class="gcp-svc-card-h">Armazenamento</div>
+                            <div class="gcp-svc-card-b">
+                              <div class="gcp-icon-hex" aria-hidden="true">
+                                <img src="icons/cloud_storage.svg" width="40" height="40" alt="" />
+                              </div>
+                              <p class="gcp-svc-card-t">Cloud Storage</p>
+                              <p class="gcp-svc-card-s">PDFs · <code>gs://</code></p>
+                            </div>
+                          </article>
+
+                          <div class="gcp-vpc-gap-mid" aria-hidden="true"></div>
+
+                          <article class="gcp-svc-card gcp-vpc-tile gcp-vpc-tile--vertex" data-gcp-node="vertex">
+                            <div class="gcp-svc-card-h">IA generativa</div>
+                            <div class="gcp-svc-card-b">
+                              <div class="gcp-icon-hex" aria-hidden="true">
+                                <img src="icons/vertex_ai.svg" width="40" height="40" alt="" />
+                              </div>
+                              <p class="gcp-svc-card-t">Vertex AI</p>
+                              <p class="gcp-svc-card-s">Gemini · resposta JSON</p>
+                            </div>
+                          </article>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+
+                  <p class="gcp-arch-foot">
+                    O <strong>Flask</strong> orquestra leitura no <strong>Cloud Storage</strong> e chamadas ao
+                    <strong>Vertex AI</strong> na mesma região; o tráfego HTTPS chega na <strong>borda</strong> e segue
+                    para a aplicação na VPC. As linhas ligam os cantos dos cartões medidos em tempo real (overlay SVG).
+                  </p>
+                </div>
+
+                <h3 class="arch-section-title arch-section-title-spaced">Camadas e responsabilidades</h3>
+                <div class="arch-cards">
+                  <article class="arch-detail-card">
+                    <h4>Apresentação</h4>
+                    <p>HTML estático ou assets leves servidos na VM de borda; sem segredo embutido.</p>
+                  </article>
+                  <article class="arch-detail-card">
+                    <h4>Aplicação</h4>
+                    <p>Flask valida entrada, orquestra leitura do bucket e chamadas ao Vertex na mesma região.</p>
+                  </article>
+                  <article class="arch-detail-card">
+                    <h4>Segurança</h4>
+                    <p>Firewall restritivo, SA dedicada e princípio do menor privilégio nos papéis.</p>
+                  </article>
+                  <article class="arch-detail-card">
+                    <h4>Operação</h4>
+                    <p>Logs no SO das VMs e métricas nativas do GCP para acompanhar latência e erros.</p>
+                  </article>
+                </div>
+
+                <div class="arch-note">
+                  <p>
+                    Frontend público → API interna (porta <strong>5000</strong>) apenas dentro da VPC, alinhado ao
+                    roteiro da prática.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dev local (repositório front separado): descomente e aponte para o Flask. Em produção com nginx, omita. -->
+    <!-- <script>window.__API_BASE__ = "http://127.0.0.1:5000";</script> -->
+    <script src="app.js" defer></script>
+  </body>
+</html>
